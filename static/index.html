@@ -910,6 +910,7 @@
         const iconSvg = ICONS[tool.icon] || ICONS.code;
         const statusLabel = isRunning ? 'Running' : 'Stopped';
         const portDisplay = `127.0.0.1:${tool.port}`;
+        const cliAlias = escapeHtml((tool.cli && tool.cli.alias) ? tool.cli.alias : tool.id);
         const safeName = escapeHtml(tool.name);
         const safeId = escapeHtml(tool.id);
 
@@ -938,6 +939,7 @@
             <div>
               <div class="tool-meta">
                 <span>Port: ${portDisplay}</span>
+                <span>CLI: <code>tools ${cliAlias}</code></span>
                 <span id="meta-status-${safeId}">${isRunning && tool.uptime ? 'Up ' + formatUptime(tool.uptime) : escapeHtml(tool.dir)}</span>
               </div>
 
