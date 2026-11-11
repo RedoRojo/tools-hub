@@ -81,8 +81,18 @@ tools/
 ├── tools.json          # Declarative registry of tools and ports
 ├── static/
 │   └── index.html      # Minimalist web interface (modern CSS + reactive JS)
+├── tests/
+│   └── test_hub.py     # Unit and HTTP integration tests
 ├── transcript/         # Independent repo: YouTube & Local Transcript (port 8001)
 ├── pdf-toolbox/        # Independent repo: PDF Toolbox (port 8002)
 ├── qr-code/            # Independent repo: Link to QR (port 8003)
 └── kindle-toolbox/     # Independent repo: Kindle Toolbox (port 8004)
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+python3 -m unittest discover -s tests -v
 ```
