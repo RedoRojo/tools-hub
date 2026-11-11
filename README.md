@@ -39,6 +39,17 @@ Output files are written to your current directory by default. Every command sup
 
 ---
 
+## 🤖 Using with AI Agents (Any Project or Computer)
+
+`setup.sh` also installs the global **Antigravity Skill** (`~/.gemini/config/skills/redo-tools/SKILL.md`), making all tools automatically discoverable in **every chat and workspace** on your machine.
+
+- **In any project on this computer**: simply ask the agent in natural language (e.g., *"compress `report.pdf` and OCR `scan.jpg`"*, *"convert this article to EPUB"*, *"transcribe this YouTube link to SRT"*). The agent loads `redo-tools` and runs `tools <alias> ... --json -q` directly.
+- **On a brand-new computer**: paste this one-liner into any agent chat:
+  > *"Clone `https://github.com/RedoRojo/tools-hub` into `~/Documents/tools`, run `./setup.sh`, and use `tools` to ..."*
+- **Agent-first documentation**: every repository includes an [`AGENTS.md`](AGENTS.md) with copy-pasteable `--json -q` recipes and exact JSON output schemas.
+
+---
+
 ## 🛠️ Included Tools (Independent Repositories)
 
 | Tool | Directory / Repo | Port | Description |

@@ -70,11 +70,18 @@ class DispatcherTests(unittest.TestCase):
 
 class TemplateTests(unittest.TestCase):
     def test_template_has_required_files(self):
-        for name in ("cli.py", "cli.sh", "run.sh", "app.py", "tool.json", "README.md",
+        for name in ("cli.py", "cli.sh", "run.sh", "app.py", "tool.json", "README.md", "AGENTS.md",
                      "requirements.txt", ".gitignore", "core/__init__.py", "tests/test_cli.py"):
             self.assertTrue((TEMPLATE_DIR / name).exists(), f"_template/{name} is missing")
         meta = json.loads((TEMPLATE_DIR / "tool.json").read_text(encoding="utf-8"))
         self.assertIn("alias", meta["cli"])
+
+    def test_global_skill_and_agents_md_exist(self):
+        skill_file = HUB_DIR / "skills" / "redo-tools" / "SKILL.md"
+        self.assertTrue(skill_file.is_file(), "skills/redo-tools/SKILL.md is missing")
+        text = skill_file.read_text(encoding="utf-8")
+        self.assertTrue(text.startswith("---\nname: redo-tools"))
+        self.assertTrue((HUB_DIR / "AGENTS.md").is_file(), "AGENTS.md is missing")
 
     def test_template_cli_tests_pass(self):
         result = subprocess.run(

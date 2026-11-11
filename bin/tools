@@ -23,7 +23,7 @@ __version__ = "1.0.0"
 
 HUB_DIR = Path(__file__).resolve().parent.parent
 TOOLS_CONFIG_FILE = HUB_DIR / "tools.json"
-IGNORED_DIRS = {"static", "bin", "tests", "docs", "brain"}
+IGNORED_DIRS = {"static", "bin", "tests", "docs", "brain", "skills"}
 
 
 def _read_json(path: Path):

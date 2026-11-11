@@ -43,6 +43,12 @@ case ":$PATH:" in
     *) echo "Warning: $BIN_DIR is not in your PATH. Add it to use the 'tools' command." ;;
 esac
 
+# Install the global Antigravity agent skill into ~/.gemini/config/skills/redo-tools
+SKILLS_DIR="${AGY_SKILLS_DIR:-$HOME/.gemini/config/skills}"
+mkdir -p "$SKILLS_DIR"
+ln -sfn "$DIR/skills/redo-tools" "$SKILLS_DIR/redo-tools"
+echo "Installed global Agent Skill: $SKILLS_DIR/redo-tools -> $DIR/skills/redo-tools"
+
 echo ""
 echo "All tools are ready."
 echo "Run ./start-hub.sh to open the dashboard at http://localhost:7777"

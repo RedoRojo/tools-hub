@@ -20,6 +20,7 @@ my-tool/
 ├── requirements.txt    # (or environment.yml for conda-based tools)
 ├── tests/
 │   └── test_cli.py     # unittest-based CLI tests (+ existing web tests)
+├── AGENTS.md           # Concise CLI recipes & JSON output schemas for AI agents
 ├── README.md           # Must document BOTH "Web Interface" and "Command Line Interface"
 └── .gitignore
 ```
@@ -74,6 +75,8 @@ Also add the repository to `TOOLS` in `setup.sh`.
 - [ ] Business logic lives in `core/`, shared by `app.py` and `cli.py`
 - [ ] `cli.py` + executable `cli.sh` following the conventions above
 - [ ] `tool.json` has a `cli` block; tool registered in `tools.json` and `setup.sh`
+- [ ] `AGENTS.md` documents exact `--json -q` CLI recipes and JSON output schema for AI agents
+- [ ]Global skill `skills/redo-tools/SKILL.md` in `tools-hub` updated with the new tool's commands
 - [ ] README documents both the Web Interface and the CLI
 - [ ] `tests/test_cli.py` passes; existing web tests still pass
 - [ ] Public GitHub repo created under `RedoRojo`, docs and commits in English

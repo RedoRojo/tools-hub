@@ -62,7 +62,7 @@ class ProcessManager:
 
         # 2. Auto-discover subdirectories containing run.sh, app.py, or tool.json
         next_port = 8005
-        ignored_dirs = {"static", "brain", "tests", "docs"}
+        ignored_dirs = {"static", "brain", "tests", "docs", "bin", "skills"}
         for item in sorted(self.base_dir.iterdir()):
             if item.is_dir() and not item.name.startswith((".", "_")) and item.name not in ignored_dirs:
                 if item.name not in registered_dirs:
