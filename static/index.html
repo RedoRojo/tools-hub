@@ -1,62 +1,204 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tools Hub | Gestor de Herramientas</title>
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var savedScheme = localStorage.getItem("color-scheme");
+      if (savedScheme === "light" || savedScheme === "dark") {
+        document.querySelector('meta[name="color-scheme"]').content = savedScheme;
+      }
+    } catch (e) {}
+  </script>
+  <title>Tools Hub | Local Tool Manager</title>
   <style>
     :root {
-      --bg: #090a0b;
-      --card-bg: #121316;
-      --card-hover: #18191d;
-      --border: #23252a;
-      --border-hover: #34373e;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-bg: rgba(59, 130, 246, 0.12);
-      --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
-      --danger: #ef4444;
-      --danger-hover: #dc2626;
-      --danger-bg: rgba(239, 68, 68, 0.12);
-      --badge-bg: #1e2025;
+      color-scheme: light dark;
+
+      /* Light tokens */
+      --bg-light: #f8fafc;
+      --card-bg-light: #ffffff;
+      --card-hover-light: #f1f5f9;
+      --border-light: #cbd5e1;
+      --border-hover-light: #94a3b8;
+      --text-main-light: #0f172a;
+      --text-muted-light: #475569;
+      --text-dim-light: #475569;
+      --accent-light: #2563eb;
+      --accent-hover-light: #1d4ed8;
+      --accent-bg-light: #eff6ff;
+      --success-light: #047857;
+      --success-bg-light: #ecfdf5;
+      --success-border-light: rgba(4, 120, 87, 0.35);
+      --danger-light: #b91c1c;
+      --danger-bg-light: #fef2f2;
+      --danger-border-light: rgba(185, 28, 28, 0.35);
+      --badge-bg-light: #f1f5f9;
+      --shadow-card-light: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+      /* Dark tokens */
+      --bg-dark: #090a0b;
+      --card-bg-dark: #121316;
+      --card-hover-dark: #18191d;
+      --border-dark: #2c3038;
+      --border-hover-dark: #454a56;
+      --text-main-dark: #f3f4f6;
+      --text-muted-dark: #b4bcc8;
+      --text-dim-dark: #9ca3af;
+      --accent-dark: #3b82f6;
+      --accent-hover-dark: #2563eb;
+      --accent-bg-dark: rgba(59, 130, 246, 0.14);
+      --success-dark: #10b981;
+      --success-bg-dark: rgba(16, 185, 129, 0.14);
+      --success-border-dark: rgba(16, 185, 129, 0.4);
+      --danger-dark: #f87171;
+      --danger-bg-dark: rgba(239, 68, 68, 0.14);
+      --danger-border-dark: rgba(239, 68, 68, 0.4);
+      --badge-bg-dark: #1e2025;
+      --shadow-card-dark: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+      /* Active semantic tokens (light default fallback) */
+      --bg: var(--bg-light);
+      --card-bg: var(--card-bg-light);
+      --card-hover: var(--card-hover-light);
+      --border: var(--border-light);
+      --border-hover: var(--border-hover-light);
+      --text-main: var(--text-main-light);
+      --text-muted: var(--text-muted-light);
+      --text-dim: var(--text-dim-light);
+      --accent: var(--accent-light);
+      --accent-hover: var(--accent-hover-light);
+      --accent-bg: var(--accent-bg-light);
+      --success: var(--success-light);
+      --success-bg: var(--success-bg-light);
+      --success-border: var(--success-border-light);
+      --danger: var(--danger-light);
+      --danger-bg: var(--danger-bg-light);
+      --danger-border: var(--danger-border-light);
+      --badge-bg: var(--badge-bg-light);
+      --shadow-card: var(--shadow-card-light);
+
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-      --shadow-card: 0 4px 20px rgba(0,0,0,0.25);
+
+      accent-color: var(--accent);
     }
 
-    @media (prefers-color-scheme: light) {
-      body.light-theme {
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --card-hover: #fcfdfe;
-        --border: #e2e8f0;
-        --border-hover: #cbd5e1;
-        --text-main: #0f172a;
-        --text-muted: #64748b;
-        --text-dim: #94a3b8;
-        --accent: #2563eb;
-        --accent-hover: #1d4ed8;
-        --accent-bg: #eff6ff;
-        --success: #059669;
-        --success-bg: #ecfdf5;
-        --danger: #dc2626;
-        --danger-hover: #b91c1c;
-        --danger-bg: #fef2f2;
-        --badge-bg: #f1f5f9;
-        --shadow-card: 0 4px 15px rgba(0,0,0,0.05);
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: var(--bg-dark);
+        --card-bg: var(--card-bg-dark);
+        --card-hover: var(--card-hover-dark);
+        --border: var(--border-dark);
+        --border-hover: var(--border-hover-dark);
+        --text-main: var(--text-main-dark);
+        --text-muted: var(--text-muted-dark);
+        --text-dim: var(--text-dim-dark);
+        --accent: var(--accent-dark);
+        --accent-hover: var(--accent-hover-dark);
+        --accent-bg: var(--accent-bg-dark);
+        --success: var(--success-dark);
+        --success-bg: var(--success-bg-dark);
+        --success-border: var(--success-border-dark);
+        --danger: var(--danger-dark);
+        --danger-bg: var(--danger-bg-dark);
+        --danger-border: var(--danger-border-dark);
+        --badge-bg: var(--badge-bg-dark);
+        --shadow-card: var(--shadow-card-dark);
       }
     }
 
-    * {
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+      --bg: var(--bg-dark);
+      --card-bg: var(--card-bg-dark);
+      --card-hover: var(--card-hover-dark);
+      --border: var(--border-dark);
+      --border-hover: var(--border-hover-dark);
+      --text-main: var(--text-main-dark);
+      --text-muted: var(--text-muted-dark);
+      --text-dim: var(--text-dim-dark);
+      --accent: var(--accent-dark);
+      --accent-hover: var(--accent-hover-dark);
+      --accent-bg: var(--accent-bg-dark);
+      --success: var(--success-dark);
+      --success-bg: var(--success-bg-dark);
+      --success-border: var(--success-border-dark);
+      --danger: var(--danger-dark);
+      --danger-bg: var(--danger-bg-dark);
+      --danger-border: var(--danger-border-dark);
+      --badge-bg: var(--badge-bg-dark);
+      --shadow-card: var(--shadow-card-dark);
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+      --bg: var(--bg-light);
+      --card-bg: var(--card-bg-light);
+      --card-hover: var(--card-hover-light);
+      --border: var(--border-light);
+      --border-hover: var(--border-hover-light);
+      --text-main: var(--text-main-light);
+      --text-muted: var(--text-muted-light);
+      --text-dim: var(--text-dim-light);
+      --accent: var(--accent-light);
+      --accent-hover: var(--accent-hover-light);
+      --accent-bg: var(--accent-bg-light);
+      --success: var(--success-light);
+      --success-bg: var(--success-bg-light);
+      --success-border: var(--success-border-light);
+      --danger: var(--danger-light);
+      --danger-bg: var(--danger-bg-light);
+      --danger-border: var(--danger-border-light);
+      --badge-bg: var(--badge-bg-light);
+      --shadow-card: var(--shadow-card-light);
+    }
+
+    @supports (color: light-dark(white, black)) {
+      :root {
+        --bg: light-dark(var(--bg-light), var(--bg-dark));
+        --card-bg: light-dark(var(--card-bg-light), var(--card-bg-dark));
+        --card-hover: light-dark(var(--card-hover-light), var(--card-hover-dark));
+        --border: light-dark(var(--border-light), var(--border-dark));
+        --border-hover: light-dark(var(--border-hover-light), var(--border-hover-dark));
+        --text-main: light-dark(var(--text-main-light), var(--text-main-dark));
+        --text-muted: light-dark(var(--text-muted-light), var(--text-muted-dark));
+        --text-dim: light-dark(var(--text-dim-light), var(--text-dim-dark));
+        --accent: light-dark(var(--accent-light), var(--accent-dark));
+        --accent-hover: light-dark(var(--accent-hover-light), var(--accent-hover-dark));
+        --accent-bg: light-dark(var(--accent-bg-light), var(--accent-bg-dark));
+        --success: light-dark(var(--success-light), var(--success-dark));
+        --success-bg: light-dark(var(--success-bg-light), var(--success-bg-dark));
+        --success-border: light-dark(var(--success-border-light), var(--success-border-dark));
+        --danger: light-dark(var(--danger-light), var(--danger-dark));
+        --danger-bg: light-dark(var(--danger-bg-light), var(--danger-bg-dark));
+        --danger-border: light-dark(var(--danger-border-light), var(--danger-border-dark));
+        --badge-bg: light-dark(var(--badge-bg-light), var(--badge-bg-dark));
+        --shadow-card: light-dark(var(--shadow-card-light), var(--shadow-card-dark));
+      }
+    }
+
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
     }
 
     body {
@@ -68,6 +210,11 @@
       flex-direction: column;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+    }
+
+    :where(a:any-link, button):focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
     }
 
     header {
@@ -85,6 +232,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -101,10 +250,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: #ffffff;
       font-weight: 700;
       font-size: 1rem;
       box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+      flex-shrink: 0;
     }
 
     .brand-title {
@@ -116,7 +266,8 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.625rem;
+      flex-wrap: wrap;
     }
 
     .status-summary {
@@ -147,20 +298,61 @@
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 0.4rem 0.6rem;
+      padding: 0.4rem 0.65rem;
+      min-block-size: 36px;
+      min-inline-size: 36px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.35rem;
       font-size: 0.8125rem;
-      transition: all 0.15s ease;
+      font-weight: 500;
+      font-family: inherit;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
 
     .icon-btn:hover {
       background: var(--card-hover);
       color: var(--text-main);
       border-color: var(--border-hover);
+    }
+
+    /* Theme toggle icon branching driven by meta[name="color-scheme"] + OS fallback */
+    .theme-state-dark {
+      display: none;
+    }
+
+    .theme-state-light {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .theme-state-light {
+        display: none;
+      }
+      .theme-state-dark {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-state-light {
+      display: none;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-state-dark {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="light"]) .theme-state-light {
+      display: inline-flex;
+      align-items: center;
+    }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) .theme-state-dark {
+      display: none;
     }
 
     main {
@@ -213,7 +405,7 @@
     }
 
     .tool-card.is-running {
-      border-color: rgba(16, 185, 129, 0.4);
+      border-color: var(--success-border);
     }
 
     .tool-header {
@@ -245,11 +437,11 @@
 
     .tool-card.is-running .tool-icon-wrapper {
       background: var(--success-bg);
-      border-color: rgba(16, 185, 129, 0.3);
+      border-color: var(--success-border);
       color: var(--success);
     }
 
-    .tool-titles h3 {
+    .tool-titles h2 {
       font-size: 1.05rem;
       font-weight: 600;
       letter-spacing: -0.01em;
@@ -281,7 +473,7 @@
 
     .status-badge.active {
       background: var(--success-bg);
-      border-color: rgba(16, 185, 129, 0.35);
+      border-color: var(--success-border);
       color: var(--success);
     }
 
@@ -330,22 +522,22 @@
       gap: 0.5rem;
     }
 
-    /* Botón principal */
+    /* Primary action button */
     .btn-launch {
       flex: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.65rem 1rem;
+      min-block-size: 38px;
+      padding: 0.6rem 1rem;
       border-radius: var(--radius-sm);
       font-size: 0.875rem;
       font-weight: 600;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
       border: 1px solid transparent;
-      outline: none;
     }
 
     .btn-launch.start {
@@ -358,20 +550,20 @@
     }
 
     .btn-launch.open {
-      background: var(--card-hover);
+      background: var(--badge-bg);
       color: var(--text-main);
       border-color: var(--border-hover);
     }
 
     .btn-launch.open:hover {
-      background: var(--border);
+      background: var(--card-hover);
       border-color: var(--text-dim);
     }
 
     .btn-action-small {
-      width: 36px;
-      height: 36px;
-      display: flex;
+      min-inline-size: 38px;
+      min-block-size: 38px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: var(--radius-sm);
@@ -379,7 +571,7 @@
       background: var(--badge-bg);
       color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
 
     .btn-action-small:hover {
@@ -391,10 +583,58 @@
     .btn-action-small.stop:hover {
       background: var(--danger-bg);
       color: var(--danger);
-      border-color: rgba(239, 68, 68, 0.4);
+      border-color: var(--danger-border);
     }
 
-    /* Footer / Tip */
+    .btn-action-small[disabled] {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    /* Toast region */
+    .toast-region {
+      position: fixed;
+      bottom: 1.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-hover);
+      padding: 0.65rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+    }
+
+    .toast.is-error .toast-dot {
+      background: var(--danger);
+    }
+
+    /* Footer */
     footer {
       border-top: 1px solid var(--border);
       padding: 1.5rem;
@@ -419,8 +659,42 @@
       border: 1px solid var(--border);
       padding: 0.15rem 0.4rem;
       border-radius: 4px;
-      font-family: monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       color: var(--text-muted);
+    }
+
+    @media (pointer: coarse) {
+      .icon-btn,
+      .btn-launch,
+      .btn-action-small {
+        min-block-size: 44px;
+      }
+      .btn-action-small {
+        min-inline-size: 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .tool-card:hover {
+        transform: none;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .tool-card,
+      .status-badge,
+      .icon-btn,
+      .btn-launch,
+      .btn-action-small,
+      .toast {
+        border: 1px solid ButtonText;
+      }
     }
   </style>
 </head>
@@ -429,22 +703,42 @@
   <header>
     <div class="header-inner">
       <div class="brand">
-        <div class="brand-logo">⚡</div>
-        <div>
-          <div class="brand-title">Tools Hub</div>
-        </div>
+        <div class="brand-logo" aria-hidden="true">⚡</div>
+        <div class="brand-title">Tools Hub</div>
       </div>
       <div class="header-actions">
         <div class="status-summary" id="statusSummary">
-          <div class="summary-dot" id="summaryDot"></div>
-          <span id="summaryText">Cargando herramientas...</span>
+          <div class="summary-dot" id="summaryDot" aria-hidden="true"></div>
+          <span id="summaryText">Loading tools...</span>
         </div>
-        <button class="icon-btn" onclick="fetchTools(true)" title="Refrescar estado (R)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" class="icon-btn" id="btnRefresh" title="Refresh status (R)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="23 4 23 10 17 10"></polyline>
             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
           </svg>
-          Refrescar
+          <span>Refresh</span>
+        </button>
+        <button type="button" class="icon-btn" id="btnThemeToggle" title="Toggle light/dark theme">
+          <span class="theme-state-light">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span class="visually-hidden">Switch to dark theme</span>
+          </span>
+          <span class="theme-state-dark">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span class="visually-hidden">Switch to light theme</span>
+          </span>
         </button>
       </div>
     </div>
@@ -452,72 +746,175 @@
 
   <main>
     <section class="hero">
-      <h1>Panel de Herramientas</h1>
-      <p>Lanzador centralizado: haz clic en cualquier herramienta para iniciarla y abrirla en una nueva pestaña.</p>
+      <h1>Tools Dashboard</h1>
+      <p>Centralized launcher: click any tool to start it and open it in a new tab.</p>
     </section>
 
     <div class="tools-grid" id="toolsGrid">
-      <!-- Tarjetas renderizadas dinámicamente -->
+      <!-- Tool cards rendered dynamically -->
     </div>
   </main>
 
+  <div class="toast-region" role="region" aria-label="Notifications">
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <span class="toast-dot" aria-hidden="true"></span>
+      <span id="toastMessage"></span>
+    </div>
+  </div>
+
   <footer>
     <div class="tip-box">
-      <span>💡 Cada herramienta corre en su propio subdirectorio y puerto sin conflictos.</span>
-      <span>Añade una nueva carpeta con <span class="code-tag">run.sh</span> para que aparezca automáticamente.</span>
+      <span><span aria-hidden="true">💡</span> Each tool runs in its own subdirectory and port without conflicts.</span>
+      <span>Add a new folder with <code class="code-tag">run.sh</code> to auto-discover it.</span>
     </div>
   </footer>
 
   <script>
     let toolsData = [];
     let isFetching = false;
+    let lastStructureKey = '';
+    let toastTimeout = null;
+    const STORAGE_KEY_SCHEME = 'color-scheme';
+
+    const btnRefresh = document.getElementById('btnRefresh');
+    const btnThemeToggle = document.getElementById('btnThemeToggle');
+    const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+    const toolsGrid = document.getElementById('toolsGrid');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
 
     const ICONS = {
-      pdf: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
-      transcript: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`,
-      qr: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="7" y1="7" x2="7.01" y2="7"></line><line x1="17" y1="7" x2="17.01" y2="7"></line><line x1="7" y1="17" x2="7.01" y2="17"></line><line x1="17" y1="17" x2="17.01" y2="17"></line></svg>`,
-      "book-open": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`,
-      code: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`
+      pdf: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+      transcript: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`,
+      qr: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="7" y1="7" x2="7.01" y2="7"></line><line x1="17" y1="7" x2="17.01" y2="7"></line><line x1="7" y1="17" x2="7.01" y2="17"></line><line x1="17" y1="17" x2="17.01" y2="17"></line></svg>`,
+      'book-open': `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`,
+      code: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`
     };
 
-    async function fetchTools(manual = false) {
+    // --- Theme Management ---
+    function getSystemScheme() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyScheme(scheme) {
+      if (colorSchemeMeta) {
+        colorSchemeMeta.content = scheme === 'light' || scheme === 'dark' ? scheme : 'light dark';
+      }
+    }
+
+    btnThemeToggle.addEventListener('click', () => {
+      let currentStored = null;
+      try {
+        currentStored = localStorage.getItem(STORAGE_KEY_SCHEME);
+      } catch (e) {}
+
+      const systemScheme = getSystemScheme();
+      const renderedScheme = currentStored === 'light' || currentStored === 'dark' ? currentStored : systemScheme;
+      const targetScheme = renderedScheme === 'dark' ? 'light' : 'dark';
+
+      try {
+        if (targetScheme === systemScheme) {
+          localStorage.removeItem(STORAGE_KEY_SCHEME);
+          applyScheme('light dark');
+        } else {
+          localStorage.setItem(STORAGE_KEY_SCHEME, targetScheme);
+          applyScheme(targetScheme);
+        }
+      } catch (e) {
+        applyScheme(targetScheme === systemScheme ? 'light dark' : targetScheme);
+      }
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY_SCHEME) {
+        applyScheme(e.newValue === 'light' || e.newValue === 'dark' ? e.newValue : 'light dark');
+      }
+    });
+
+    function showToast(msg, isError = false) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toast.classList.toggle('is-error', isError);
+      toastMessage.textContent = '';
+      toast.classList.add('show');
+      requestAnimationFrame(() => {
+        toastMessage.textContent = msg;
+      });
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          if (!toast.classList.contains('show')) {
+            toastMessage.textContent = '';
+          }
+        }, 250);
+      }, 2600);
+    }
+
+    async function fetchTools() {
       if (isFetching) return;
       isFetching = true;
       try {
         const res = await fetch('/api/tools');
-        if (!res.ok) throw new Error('Error de red');
+        if (!res.ok) throw new Error('Network error');
         toolsData = await res.json();
         renderTools();
       } catch (err) {
-        console.error('Error al consultar herramientas:', err);
+        console.error('Failed to fetch tools:', err);
       } finally {
         isFetching = false;
       }
     }
 
-    function renderTools() {
-      const grid = document.getElementById('toolsGrid');
-      const activeCount = toolsData.filter(t => t.port_active).length;
-      
-      // Actualizar resumen en header
+    function updateHeaderSummary() {
+      const activeCount = toolsData.filter((t) => t.port_active).length;
       const summaryDot = document.getElementById('summaryDot');
       const summaryText = document.getElementById('summaryText');
       if (activeCount > 0) {
         summaryDot.classList.add('active');
-        summaryText.textContent = `${activeCount} activa${activeCount > 1 ? 's' : ''} de ${toolsData.length}`;
+        summaryText.textContent = `${activeCount} of ${toolsData.length} active`;
       } else {
         summaryDot.classList.remove('active');
-        summaryText.textContent = `0 activas de ${toolsData.length}`;
+        summaryText.textContent = `0 of ${toolsData.length} active`;
+      }
+    }
+
+    function getStructureKey(list) {
+      return JSON.stringify(
+        list.map((t) => [t.id, t.name, t.description, t.category, t.icon, t.port, t.dir, Boolean(t.port_active)])
+      );
+    }
+
+    function renderTools() {
+      updateHeaderSummary();
+
+      const nextStructureKey = getStructureKey(toolsData);
+      if (nextStructureKey === lastStructureKey) {
+        // Update uptime text in-place so active keyboard focus is never disrupted
+        for (const tool of toolsData) {
+          const metaEl = document.getElementById(`meta-status-${tool.id}`);
+          if (metaEl) {
+            metaEl.textContent = tool.port_active && tool.uptime ? `Up ${formatUptime(tool.uptime)}` : tool.dir;
+          }
+        }
+        return;
       }
 
-      grid.innerHTML = toolsData.map(tool => {
-        const isRunning = tool.port_active;
+      // Preserve focus across structural re-renders if user focused inside a card
+      const activeEl = document.activeElement;
+      const focusedToolId = activeEl && activeEl.dataset ? activeEl.dataset.toolId : null;
+      const focusedAction = activeEl && activeEl.dataset ? activeEl.dataset.action : null;
+
+      lastStructureKey = nextStructureKey;
+
+      toolsGrid.innerHTML = toolsData.map((tool) => {
+        const isRunning = Boolean(tool.port_active);
         const iconSvg = ICONS[tool.icon] || ICONS.code;
-        const statusLabel = isRunning ? 'En ejecución' : 'Detenida';
+        const statusLabel = isRunning ? 'Running' : 'Stopped';
         const portDisplay = `127.0.0.1:${tool.port}`;
+        const safeName = escapeHtml(tool.name);
+        const safeId = escapeHtml(tool.id);
 
         return `
-          <div class="tool-card ${isRunning ? 'is-running' : ''}" id="card-${tool.id}">
+          <article class="tool-card ${isRunning ? 'is-running' : ''}" id="card-${safeId}">
             <div>
               <div class="tool-header">
                 <div class="tool-info">
@@ -525,12 +922,12 @@
                     ${iconSvg}
                   </div>
                   <div class="tool-titles">
-                    <h3>${escapeHtml(tool.name)}</h3>
-                    <div class="category">${escapeHtml(tool.category || 'Herramienta')}</div>
+                    <h2>${safeName}</h2>
+                    <div class="category">${escapeHtml(tool.category || 'Tool')}</div>
                   </div>
                 </div>
                 <div class="status-badge ${isRunning ? 'active' : ''}">
-                  <span class="pulse-dot"></span>
+                  <span class="pulse-dot" aria-hidden="true"></span>
                   <span>${statusLabel}</span>
                 </div>
               </div>
@@ -540,66 +937,98 @@
 
             <div>
               <div class="tool-meta">
-                <span>Puerto: ${portDisplay}</span>
-                <span>${isRunning && tool.uptime ? 'Activa hace ' + formatUptime(tool.uptime) : tool.dir}</span>
+                <span>Port: ${portDisplay}</span>
+                <span id="meta-status-${safeId}">${isRunning && tool.uptime ? 'Up ' + formatUptime(tool.uptime) : escapeHtml(tool.dir)}</span>
               </div>
 
               <div class="actions-row">
-                <a href="/launch/${tool.id}" target="_blank" class="btn-launch ${isRunning ? 'open' : 'start'}" title="Abrir herramienta en nueva pestaña">
+                <a href="/launch/${encodeURIComponent(tool.id)}" target="_blank" rel="noopener noreferrer" class="btn-launch ${isRunning ? 'open' : 'start'}" data-tool-id="${safeId}" data-action="launch">
                   ${isRunning ? `
-                    <span>Abrir en nueva pestaña</span>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <span>Open in new tab</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                       <polyline points="15 3 21 3 21 9"></polyline>
                       <line x1="10" y1="14" x2="21" y2="3"></line>
                     </svg>
                   ` : `
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
-                    <span>Iniciar y Abrir</span>
+                    <span>Launch &amp; Open</span>
                   `}
                 </a>
 
                 ${isRunning ? `
-                  <button class="btn-action-small" onclick="restartTool('${tool.id}')" title="Reiniciar servidor">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <button type="button" class="btn-action-small" data-action="restart" data-tool-id="${safeId}" aria-label="Restart ${safeName}" title="Restart server">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <polyline points="23 4 23 10 17 10"></polyline>
                       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
                     </svg>
                   </button>
-                  <button class="btn-action-small stop" onclick="stopTool('${tool.id}')" title="Detener servidor">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <button type="button" class="btn-action-small stop" data-action="stop" data-tool-id="${safeId}" aria-label="Stop ${safeName}" title="Stop server">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     </svg>
                   </button>
                 ` : ''}
               </div>
             </div>
-          </div>
+          </article>
         `;
       }).join('');
+
+      if (focusedToolId) {
+        const nextFocus =
+          toolsGrid.querySelector(`[data-tool-id="${CSS.escape(focusedToolId)}"][data-action="${CSS.escape(focusedAction || 'launch')}"]`) ||
+          toolsGrid.querySelector(`[data-tool-id="${CSS.escape(focusedToolId)}"][data-action="launch"]`);
+        if (nextFocus) {
+          nextFocus.focus();
+        }
+      }
     }
 
-    async function stopTool(id) {
+    async function stopTool(id, triggerBtn) {
+      if (triggerBtn) triggerBtn.disabled = true;
       try {
-        const res = await fetch(`/api/tools/${id}/stop`, { method: 'POST' });
+        const res = await fetch(`/api/tools/${encodeURIComponent(id)}/stop`, { method: 'POST' });
+        if (!res.ok) throw new Error('Request failed');
         await res.json();
+        showToast(`Stopped ${id}`);
         setTimeout(fetchTools, 400);
       } catch (err) {
-        alert('Error al detener la herramienta');
+        if (triggerBtn) triggerBtn.disabled = false;
+        showToast('Failed to stop tool', true);
       }
     }
 
-    async function restartTool(id) {
+    async function restartTool(id, triggerBtn) {
+      if (triggerBtn) triggerBtn.disabled = true;
       try {
-        const res = await fetch(`/api/tools/${id}/restart`, { method: 'POST' });
+        const res = await fetch(`/api/tools/${encodeURIComponent(id)}/restart`, { method: 'POST' });
+        if (!res.ok) throw new Error('Request failed');
         await res.json();
+        showToast(`Restarting ${id}...`);
         setTimeout(fetchTools, 700);
       } catch (err) {
-        alert('Error al reiniciar la herramienta');
+        if (triggerBtn) triggerBtn.disabled = false;
+        showToast('Failed to restart tool', true);
       }
     }
+
+    toolsGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action][data-tool-id]');
+      if (!btn) return;
+      const { action, toolId } = btn.dataset;
+      if (action === 'stop') {
+        stopTool(toolId, btn);
+      } else if (action === 'restart') {
+        restartTool(toolId, btn);
+      }
+    });
+
+    btnRefresh.addEventListener('click', () => {
+      fetchTools();
+    });
 
     function formatUptime(seconds) {
       if (seconds < 60) return `${seconds}s`;
@@ -615,19 +1044,20 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    // Atajo de teclado 'r' para refrescar
+    // Keyboard shortcut 'R' to refresh tool statuses
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'r' || e.key === 'R') {
-        if (document.activeElement.tagName !== 'INPUT') {
-          fetchTools(true);
+      if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (document.activeElement && document.activeElement.tagName !== 'INPUT') {
+          fetchTools();
         }
       }
     });
 
-    // Iniciar y actualizar periódicamente cada 2.5s
+    // Initial load and 2.5s status polling
     fetchTools();
     setInterval(fetchTools, 2500);
   </script>
