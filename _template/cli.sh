@@ -12,7 +12,7 @@ elif [ -x "$SCRIPT_DIR/.venv/bin/python" ]; then
 else
     echo "Creating virtual environment in $SCRIPT_DIR/.venv (first run)..." >&2
     python3 -m venv "$SCRIPT_DIR/.venv" >&2
-    "$SCRIPT_DIR/.venv/bin/pip" install --quiet -r "$SCRIPT_DIR/requirements.txt" >&2
+    "$SCRIPT_DIR/.venv/bin/pip" install --quiet --disable-pip-version-check -r "$SCRIPT_DIR/requirements.txt" >&2
     PYTHON_CMD="$SCRIPT_DIR/.venv/bin/python"
 fi
 
