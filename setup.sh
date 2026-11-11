@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Tools Hub - Script de instalación y sincronización de herramientas
-# Clona o actualiza todos los repositorios independientes de herramientas.
+# Tools Hub - Tool installation and synchronization script
+# Clones or updates all independent tool repositories.
 # ==============================================================================
 set -e
 
@@ -17,21 +17,21 @@ TOOLS=(
 )
 
 echo "=========================================================="
-echo " Sincronizando herramientas de Tools Hub (@$GITHUB_USER)"
+echo " Synchronizing Tools Hub repositories (@$GITHUB_USER)"
 echo "=========================================================="
 
 for tool in "${TOOLS[@]}"; do
     if [ -d "$tool/.git" ]; then
-        echo "🔄 Actualizando $tool..."
-        git -C "$tool" pull --ff-only || echo "⚠️  No se pudo hacer fast-forward en $tool (revisa cambios locales)."
+        echo "Updating $tool..."
+        git -C "$tool" pull --ff-only || echo "Warning: Could not fast-forward $tool (check local changes)."
     elif [ -d "$tool" ]; then
-        echo "ℹ️  La carpeta '$tool/' ya existe localmente (sin .git o personalizada). Omitiendo clonado."
+        echo "Directory '$tool/' already exists locally without .git. Skipping clone."
     else
-        echo "📥 Clonando $tool..."
+        echo "Cloning $tool..."
         git clone "https://github.com/$GITHUB_USER/$tool.git" "$tool"
     fi
 done
 
 echo ""
-echo "✅ Todas las herramientas están listas."
-echo "🚀 Ejecuta ./start-hub.sh para abrir el panel en http://localhost:7777"
+echo "All tools are ready."
+echo "Run ./start-hub.sh to open the dashboard at http://localhost:7777"

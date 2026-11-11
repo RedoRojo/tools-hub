@@ -1,88 +1,88 @@
 # Tools Hub ⚡
 
-Panel central y gestor unificado para todas tus herramientas locales de trabajo. Diseñado con una interfaz web sobria, minimalista y ultrarrápida, permite ejecutar y abrir cualquier herramienta en una nueva pestaña del navegador con un solo clic.
+Central dashboard and unified process manager for local productivity web tools. Designed with a clean, minimalist, and ultra-fast web interface, it lets you launch and open any tool in a new browser tab with a single click.
 
 ---
 
-## 🚀 Inicio Rápido
+## 🚀 Quick Start
 
-Si acabas de clonar este repositorio en una máquina nueva, descarga todas las herramientas independientes con:
+If you just cloned this repository on a new machine, download all independent tool repositories with:
 
 ```bash
 ./setup.sh
 ```
 
-Para iniciar el panel central y abrirlo automáticamente en tu navegador predeterminado:
+To start the central dashboard and open it automatically in your default browser:
 
 ```bash
 ./start-hub.sh
 ```
 
-El panel estará disponible en: **[http://localhost:7777](http://localhost:7777)**
+The dashboard will be available at: **[http://localhost:7777](http://localhost:7777)**
 
 ---
 
-## 🛠️ Herramientas Incluidas (Repositorios Independientes)
+## 🛠️ Included Tools (Independent Repositories)
 
-| Herramienta | Carpeta / Repo | Puerto | Descripción |
+| Tool | Directory / Repo | Port | Description |
 | :--- | :--- | :--- | :--- |
-| **YouTube & Local Transcript** | [`transcript/`](https://github.com/RedoRojo/transcript) | `8001` | Transcripción de videos de YouTube y archivos locales con Whisper y exportación multiformato (TXT, PDF, SRT, MD). |
-| **PDF Toolbox** | [`pdf-toolbox/`](https://github.com/RedoRojo/pdf-toolbox) | `8002` | OCR de libros escaneados, compresión, unión, división, rotación y conversión limpia de artículos web a PDF. |
-| **Link to QR** | [`qr-code/`](https://github.com/RedoRojo/qr-code) | `8003` | Generador instantáneo de códigos QR con copia a portapapeles y descargas PNG/SVG. |
-| **Kindle Toolbox** | [`kindle-toolbox/`](https://github.com/RedoRojo/kindle-toolbox) | `8004` | Conversor de artículos web y PDFs a libros EPUB3 reflowable optimizados para pantallas E-Ink y Kindle. |
+| **YouTube & Local Transcript** | [`transcript/`](https://github.com/RedoRojo/transcript) | `8001` | YouTube video and local media transcription powered by Whisper with multi-format export (TXT, PDF, SRT, MD). |
+| **PDF Toolbox** | [`pdf-toolbox/`](https://github.com/RedoRojo/pdf-toolbox) | `8002` | Scanned book OCR, PDF compression, merge, split, rotate, and clean web article to PDF conversion. |
+| **Link to QR** | [`qr-code/`](https://github.com/RedoRojo/qr-code) | `8003` | Instant QR code generator with one-click clipboard copy and PNG/SVG downloads. |
+| **Kindle Toolbox** | [`kindle-toolbox/`](https://github.com/RedoRojo/kindle-toolbox) | `8004` | Web article and PDF to reflowable EPUB3 converter optimized for E-Ink displays and Kindle readers. |
 
-Cada herramienta vive en su propio repositorio de Git y corre de manera aislada en su subdirectorio con su entorno específico (`.venv` o Miniconda) sin colisión de puertos.
-
----
-
-## ⚡ ¿Cómo Funciona el Lanzador de 1 Clic?
-
-1. En el panel principal (`http://localhost:7777`), haz clic en **"Iniciar y Abrir"** en la tarjeta de la herramienta deseada.
-2. El navegador abrirá una nueva pestaña. Si el servidor aún está inactivo, el Hub lo iniciará automáticamente en segundo plano.
-3. La pestaña detecta en tiempo real cuando el puerto del servidor está listo y redirige instantáneamente a la herramienta.
-4. Si la herramienta ya estaba activa, se abrirá inmediatamente sin tiempos de espera.
-5. Puedes detener o reiniciar cualquier herramienta activa directamente desde los botones de su tarjeta.
+Each tool lives in its own Git repository and runs in isolation inside its subdirectory with its own environment (`.venv` or Miniconda) and dedicated port.
 
 ---
 
-## ➕ Cómo Añadir una Nueva Herramienta
+## ⚡ How the 1-Click Launcher Works
 
-El Hub incluye **auto-detección automática**. Para integrar una nueva herramienta:
+1. On the main dashboard (`http://localhost:7777`), click **"Launch & Open"** on the desired tool card.
+2. Your browser opens a new tab. If the tool's server is currently stopped, the Hub automatically starts it in the background.
+3. The tab polls the server port in real time and redirects immediately once the tool is ready.
+4. If the tool was already running, it opens instantaneously with zero wait time.
+5. You can stop or restart any running tool directly from the action buttons on its card.
 
-1. Crea o clona una carpeta en este directorio (ej. `mi-herramienta/`).
-2. Agrega dentro su script de inicio `run.sh` o archivo `app.py` (y opcionalmente un `tool.json`).
-3. *(Opcional)* Declara sus metadatos y puerto en `tools.json`:
+---
+
+## ➕ Adding a New Tool
+
+The Hub includes **automatic tool discovery**. To integrate a new tool:
+
+1. Create or clone a folder in this directory (e.g., `my-tool/`).
+2. Add its startup script `run.sh` or `app.py` inside (and optionally a `tool.json`).
+3. *(Optional)* Register its metadata and port in `tools.json`:
 
 ```json
 {
-  "id": "mi-herramienta",
-  "name": "Mi Nueva Herramienta",
-  "description": "Breve descripción de lo que hace.",
-  "category": "Utilidades",
+  "id": "my-tool",
+  "name": "My New Tool",
+  "description": "Brief description of what it does.",
+  "category": "Utilities",
   "icon": "code",
-  "dir": "mi-herramienta",
+  "dir": "my-tool",
   "command": "./run.sh",
   "port": 8005,
   "health_path": "/"
 }
 ```
 
-Al refrescar el panel (tecla `R` o botón Refrescar), aparecerá automáticamente lista para usarse.
+Refresh the dashboard (`R` key or Refresh button) and it will automatically appear ready to launch.
 
 ---
 
-## ⚙️ Estructura del Proyecto
+## ⚙️ Project Structure
 
 ```text
 tools/
-├── hub.py              # Servidor HTTP y gestor de procesos (Python standard library)
-├── start-hub.sh        # Script ejecutable de inicio y apertura de navegador
-├── setup.sh            # Script para clonar o actualizar los repositorios de herramientas
-├── tools.json          # Registro declarativo de herramientas y puertos
+├── hub.py              # HTTP server and process manager (Python standard library)
+├── start-hub.sh        # Executable startup script and browser launcher
+├── setup.sh            # Script to clone or update all independent tool repositories
+├── tools.json          # Declarative registry of tools and ports
 ├── static/
-│   └── index.html      # Interfaz minimalista (CSS moderno + JS reactivo)
-├── transcript/         # Repo independiente: YouTube & Local Transcript (puerto 8001)
-├── pdf-toolbox/        # Repo independiente: PDF Toolbox (puerto 8002)
-├── qr-code/            # Repo independiente: Link to QR (puerto 8003)
-└── kindle-toolbox/     # Repo independiente: Kindle Toolbox (puerto 8004)
+│   └── index.html      # Minimalist web interface (modern CSS + reactive JS)
+├── transcript/         # Independent repo: YouTube & Local Transcript (port 8001)
+├── pdf-toolbox/        # Independent repo: PDF Toolbox (port 8002)
+├── qr-code/            # Independent repo: Link to QR (port 8003)
+└── kindle-toolbox/     # Independent repo: Kindle Toolbox (port 8004)
 ```

@@ -7,7 +7,7 @@ venv/
 hub.log
 *.log
 
-# Repositorios independientes de herramientas (gestionados por separado / setup.sh)
+# Independent tool repositories (managed separately via setup.sh)
 pdf-toolbox/
 transcript/
 qr-code/
