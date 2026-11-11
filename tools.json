@@ -1,0 +1,46 @@
+[
+  {
+    "id": "pdf-toolbox",
+    "name": "PDF Toolbox",
+    "description": "Herramienta rápida para digitalizar libros con OCR, comprimir, dividir, unir, rotar y convertir artículos web a PDF.",
+    "category": "Documentos",
+    "icon": "pdf",
+    "dir": "pdf-toolbox",
+    "command": "./run.sh",
+    "port": 8002,
+    "health_path": "/"
+  },
+  {
+    "id": "transcript",
+    "name": "Transcript (YouTube & Local)",
+    "description": "Transcripción de videos de YouTube y archivos locales de video/audio con Whisper en TXT, PDF, SRT, Markdown y más.",
+    "category": "Multimedia",
+    "icon": "transcript",
+    "dir": "transcript",
+    "command": "./run.sh",
+    "port": 8001,
+    "health_path": "/"
+  },
+  {
+    "id": "qr-code",
+    "name": "Link to QR",
+    "description": "Convierte cualquier enlace o texto en código QR al instante, con descarga en PNG y SVG.",
+    "category": "Utilidades",
+    "icon": "qr",
+    "dir": "qr-code",
+    "command": "./run.sh",
+    "port": 8003,
+    "health_path": "/"
+  },
+  {
+    "id": "kindle-toolbox",
+    "name": "Kindle Toolbox",
+    "description": "Conversor de artículos web a EPUB optimizado para pantallas E-Ink y lectores Kindle.",
+    "category": "Lectura",
+    "icon": "book-open",
+    "dir": "kindle-toolbox",
+    "command": "./run.sh",
+    "port": 8004,
+    "health_path": "/"
+  }
+]

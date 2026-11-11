@@ -1,0 +1,19 @@
+# Python & Logs
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+hub.log
+*.log
+
+# Repositorios independientes de herramientas (gestionados por separado / setup.sh)
+pdf-toolbox/
+transcript/
+qr-code/
+kindle-toolbox/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

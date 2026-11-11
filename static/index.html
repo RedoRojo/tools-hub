@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools Hub | Gestor de Herramientas</title>
+  <style>
+    :root {
+      --bg: #090a0b;
+      --card-bg: #121316;
+      --card-hover: #18191d;
+      --border: #23252a;
+      --border-hover: #34373e;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-bg: rgba(59, 130, 246, 0.12);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --badge-bg: #1e2025;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    @media (prefers-color-scheme: light) {
+      body.light-theme {
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --card-hover: #fcfdfe;
+        --border: #e2e8f0;
+        --border-hover: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --text-dim: #94a3b8;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --accent-bg: #eff6ff;
+        --success: #059669;
+        --success-bg: #ecfdf5;
+        --danger: #dc2626;
+        --danger-hover: #b91c1c;
+        --danger-bg: #fef2f2;
+        --badge-bg: #f1f5f9;
+        --shadow-card: 0 4px 15px rgba(0,0,0,0.05);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .status-summary {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--badge-bg);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+    }
+
+    .summary-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+
+    .summary-dot.active {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.6rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8125rem;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--card-hover);
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .hero {
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 1.625rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* Grid layout */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .tool-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .tool-card.is-running {
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-info {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+
+    .tool-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-main);
+    }
+
+    .tool-card.is-running .tool-icon-wrapper {
+      background: var(--success-bg);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--success);
+    }
+
+    .tool-titles h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .tool-titles .category {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+      margin-top: 0.15rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--badge-bg);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .status-badge.active {
+      background: var(--success-bg);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: var(--success);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+
+    .status-badge.active .pulse-dot {
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    .tool-desc {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.45;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+
+    .tool-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.75rem;
+      margin-bottom: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .actions-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Botón principal */
+    .btn-launch {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn-launch.start {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-launch.start:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-launch.open {
+      background: var(--card-hover);
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+
+    .btn-launch.open:hover {
+      background: var(--border);
+      border-color: var(--text-dim);
+    }
+
+    .btn-action-small {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--badge-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-small:hover {
+      background: var(--card-hover);
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+
+    .btn-action-small.stop:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    /* Footer / Tip */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      background: var(--bg);
+      font-size: 0.8125rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    .tip-box {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .code-tag {
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">⚡</div>
+        <div>
+          <div class="brand-title">Tools Hub</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="status-summary" id="statusSummary">
+          <div class="summary-dot" id="summaryDot"></div>
+          <span id="summaryText">Cargando herramientas...</span>
+        </div>
+        <button class="icon-btn" onclick="fetchTools(true)" title="Refrescar estado (R)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Refrescar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Panel de Herramientas</h1>
+      <p>Lanzador centralizado: haz clic en cualquier herramienta para iniciarla y abrirla en una nueva pestaña.</p>
+    </section>
+
+    <div class="tools-grid" id="toolsGrid">
+      <!-- Tarjetas renderizadas dinámicamente -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="tip-box">
+      <span>💡 Cada herramienta corre en su propio subdirectorio y puerto sin conflictos.</span>
+      <span>Añade una nueva carpeta con <span class="code-tag">run.sh</span> para que aparezca automáticamente.</span>
+    </div>
+  </footer>
+
+  <script>
+    let toolsData = [];
+    let isFetching = false;
+
+    const ICONS = {
+      pdf: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+      transcript: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`,
+      qr: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="7" y1="7" x2="7.01" y2="7"></line><line x1="17" y1="7" x2="17.01" y2="7"></line><line x1="7" y1="17" x2="7.01" y2="17"></line><line x1="17" y1="17" x2="17.01" y2="17"></line></svg>`,
+      "book-open": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`,
+      code: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`
+    };
+
+    async function fetchTools(manual = false) {
+      if (isFetching) return;
+      isFetching = true;
+      try {
+        const res = await fetch('/api/tools');
+        if (!res.ok) throw new Error('Error de red');
+        toolsData = await res.json();
+        renderTools();
+      } catch (err) {
+        console.error('Error al consultar herramientas:', err);
+      } finally {
+        isFetching = false;
+      }
+    }
+
+    function renderTools() {
+      const grid = document.getElementById('toolsGrid');
+      const activeCount = toolsData.filter(t => t.port_active).length;
+      
+      // Actualizar resumen en header
+      const summaryDot = document.getElementById('summaryDot');
+      const summaryText = document.getElementById('summaryText');
+      if (activeCount > 0) {
+        summaryDot.classList.add('active');
+        summaryText.textContent = `${activeCount} activa${activeCount > 1 ? 's' : ''} de ${toolsData.length}`;
+      } else {
+        summaryDot.classList.remove('active');
+        summaryText.textContent = `0 activas de ${toolsData.length}`;
+      }
+
+      grid.innerHTML = toolsData.map(tool => {
+        const isRunning = tool.port_active;
+        const iconSvg = ICONS[tool.icon] || ICONS.code;
+        const statusLabel = isRunning ? 'En ejecución' : 'Detenida';
+        const portDisplay = `127.0.0.1:${tool.port}`;
+
+        return `
+          <div class="tool-card ${isRunning ? 'is-running' : ''}" id="card-${tool.id}">
+            <div>
+              <div class="tool-header">
+                <div class="tool-info">
+                  <div class="tool-icon-wrapper">
+                    ${iconSvg}
+                  </div>
+                  <div class="tool-titles">
+                    <h3>${escapeHtml(tool.name)}</h3>
+                    <div class="category">${escapeHtml(tool.category || 'Herramienta')}</div>
+                  </div>
+                </div>
+                <div class="status-badge ${isRunning ? 'active' : ''}">
+                  <span class="pulse-dot"></span>
+                  <span>${statusLabel}</span>
+                </div>
+              </div>
+
+              <p class="tool-desc">${escapeHtml(tool.description)}</p>
+            </div>
+
+            <div>
+              <div class="tool-meta">
+                <span>Puerto: ${portDisplay}</span>
+                <span>${isRunning && tool.uptime ? 'Activa hace ' + formatUptime(tool.uptime) : tool.dir}</span>
+              </div>
+
+              <div class="actions-row">
+                <a href="/launch/${tool.id}" target="_blank" class="btn-launch ${isRunning ? 'open' : 'start'}" title="Abrir herramienta en nueva pestaña">
+                  ${isRunning ? `
+                    <span>Abrir en nueva pestaña</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  ` : `
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Iniciar y Abrir</span>
+                  `}
+                </a>
+
+                ${isRunning ? `
+                  <button class="btn-action-small" onclick="restartTool('${tool.id}')" title="Reiniciar servidor">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                  </button>
+                  <button class="btn-action-small stop" onclick="stopTool('${tool.id}')" title="Detener servidor">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    </svg>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function stopTool(id) {
+      try {
+        const res = await fetch(`/api/tools/${id}/stop`, { method: 'POST' });
+        await res.json();
+        setTimeout(fetchTools, 400);
+      } catch (err) {
+        alert('Error al detener la herramienta');
+      }
+    }
+
+    async function restartTool(id) {
+      try {
+        const res = await fetch(`/api/tools/${id}/restart`, { method: 'POST' });
+        await res.json();
+        setTimeout(fetchTools, 700);
+      } catch (err) {
+        alert('Error al reiniciar la herramienta');
+      }
+    }
+
+    function formatUptime(seconds) {
+      if (seconds < 60) return `${seconds}s`;
+      const mins = Math.floor(seconds / 60);
+      if (mins < 60) return `${mins}m`;
+      const hours = Math.floor(mins / 60);
+      return `${hours}h ${mins % 60}m`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Atajo de teclado 'r' para refrescar
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'r' || e.key === 'R') {
+        if (document.activeElement.tagName !== 'INPUT') {
+          fetchTools(true);
+        }
+      }
+    });
+
+    // Iniciar y actualizar periódicamente cada 2.5s
+    fetchTools();
+    setInterval(fetchTools, 2500);
+  </script>
+</body>
+</html>
