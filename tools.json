@@ -8,7 +8,8 @@
     "dir": "pdf-toolbox",
     "command": "./run.sh",
     "port": 8002,
-    "health_path": "/"
+    "health_path": "/",
+    "cli": { "alias": "pdf", "command": "./cli.sh" }
   },
   {
     "id": "transcript",
@@ -19,7 +20,8 @@
     "dir": "transcript",
     "command": "./run.sh",
     "port": 8001,
-    "health_path": "/"
+    "health_path": "/",
+    "cli": { "alias": "transcript", "command": "./cli.sh" }
   },
   {
     "id": "qr-code",
@@ -30,7 +32,8 @@
     "dir": "qr-code",
     "command": "./run.sh",
     "port": 8003,
-    "health_path": "/"
+    "health_path": "/",
+    "cli": { "alias": "qr", "command": "./cli.sh" }
   },
   {
     "id": "kindle-toolbox",
@@ -41,6 +44,7 @@
     "dir": "kindle-toolbox",
     "command": "./run.sh",
     "port": 8004,
-    "health_path": "/"
+    "health_path": "/",
+    "cli": { "alias": "kindle", "command": "./cli.sh" }
   }
 ]

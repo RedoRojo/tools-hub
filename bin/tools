@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""
+tools - Global CLI dispatcher for Tools Hub.
+
+Resolves a tool by its CLI alias, id, or directory name and executes that
+tool's CLI launcher (usually ./cli.sh), forwarding all remaining arguments.
+
+Usage:
+    tools                       List available tools
+    tools list                  List available tools
+    tools help <tool>           Show help for a tool
+    tools <tool> [args...]      Run a tool's CLI (e.g. tools pdf compress a.pdf)
+
+Uses only the Python 3 standard library so it starts instantly.
+"""
+
+import json
+import os
+import sys
+from pathlib import Path
+
+__version__ = "1.0.0"
+
+HUB_DIR = Path(__file__).resolve().parent.parent
+TOOLS_CONFIG_FILE = HUB_DIR / "tools.json"
+IGNORED_DIRS = {"static", "bin", "tests", "docs", "brain"}
+
+
+def _read_json(path: Path):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
+
+
+def load_tools():
+    """Load tools from tools.json, then auto-discover tool dirs with a tool.json."""
+    tools = []
+    registered = set()
+
+    data = _read_json(TOOLS_CONFIG_FILE)
+    if isinstance(data, list):
+        for entry in data:
+            if isinstance(entry, dict):
+                tools.append(dict(entry))
+                registered.add(entry.get("dir", entry.get("id")))
+
+    for item in sorted(HUB_DIR.iterdir()):
+        if not item.is_dir() or item.name.startswith((".", "_")) or item.name in IGNORED_DIRS:
+            continue
+        if item.name in registered:
+            continue
+        meta = _read_json(item / "tool.json")
+        if isinstance(meta, dict):
+            meta.setdefault("id", item.name)
+            meta["dir"] = item.name
+            tools.append(meta)
+
+    # Merge CLI info from each tool's own tool.json when tools.json omits it
+    for tool in tools:
+        if "cli" not in tool:
+            meta = _read_json(HUB_DIR / tool.get("dir", tool["id"]) / "tool.json")
+            if isinstance(meta, dict) and isinstance(meta.get("cli"), dict):
+                tool["cli"] = meta["cli"]
+    return tools
+
+
+def cli_launcher(tool):
+    """Return the absolute path of a tool's CLI launcher, or None if unavailable."""
+    cli = tool.get("cli")
+    if not isinstance(cli, dict):
+        return None
+    tool_dir = HUB_DIR / tool.get("dir", tool["id"])
+    launcher = (tool_dir / cli.get("command", "./cli.sh")).resolve()
+    if launcher.is_file() and os.access(launcher, os.X_OK):
+        return launcher
+    return None
+
+
+def alias_of(tool):
+    cli = tool.get("cli") if isinstance(tool.get("cli"), dict) else {}
+    return cli.get("alias") or tool["id"]
+
+
+def resolve(name, tools):
+    for key in ("alias", "id", "dir"):
+        for tool in tools:
+            value = alias_of(tool) if key == "alias" else tool.get(key)
+            if value == name:
+                return tool
+    return None
+
+
+def print_list(tools, stream=sys.stdout):
+    print(f"Tools Hub CLI v{__version__}\n", file=stream)
+    print("Usage: tools <tool> <command> [options]", file=stream)
+    print("       tools help <tool>\n", file=stream)
+    print("Available tools:", file=stream)
+    width = max((len(alias_of(t)) for t in tools), default=8) + 2
+    for tool in tools:
+        status = "" if cli_launcher(tool) else "  (no CLI yet)"
+        print(f"  {alias_of(tool):<{width}}{tool.get('name', tool['id'])}{status}", file=stream)
+    print("\nRun 'tools <tool> --help' for tool-specific commands.", file=stream)
+
+
+def run_tool(tool, args):
+    launcher = cli_launcher(tool)
+    if launcher is None:
+        print(f"error: '{tool['id']}' does not provide a CLI yet.", file=sys.stderr)
+        return 1
+    env = dict(os.environ)
+    env["TOOLS_PROG"] = f"tools {alias_of(tool)}"
+    os.execve(str(launcher), [str(launcher), *args], env)
+    return 0  # unreachable
+
+
+def main(argv):
+    tools = load_tools()
+
+    if not argv or argv[0] in ("list", "ls", "-h", "--help"):
+        print_list(tools)
+        return 0
+    if argv[0] in ("-V", "--version"):
+        print(f"tools {__version__}")
+        return 0
+    if argv[0] == "help":
+        if len(argv) < 2:
+            print_list(tools)
+            return 0
+        argv = [argv[1], "--help"]
+
+    tool = resolve(argv[0], tools)
+    if tool is None:
+        print(f"error: unknown tool '{argv[0]}'.\n", file=sys.stderr)
+        print_list(tools, stream=sys.stderr)
+        return 2
+    return run_tool(tool, argv[1:])
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

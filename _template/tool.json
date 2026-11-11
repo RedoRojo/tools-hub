@@ -1,0 +1,11 @@
+{
+  "id": "example-tool",
+  "name": "Example Tool",
+  "description": "One-line description of what the tool does.",
+  "category": "Utilities",
+  "icon": "code",
+  "command": "./run.sh",
+  "port": 8005,
+  "health_path": "/",
+  "cli": { "alias": "example", "command": "./cli.sh" }
+}

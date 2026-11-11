@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Example Tool</title>
+</head>
+<body>
+  <main>
+    <h1>Example Tool</h1>
+    <form id="form">
+      <label for="name">Name</label>
+      <input id="name" name="name" required>
+      <button type="submit">Greet</button>
+    </form>
+    <output id="result" aria-live="polite"></output>
+  </main>
+  <script>
+    document.getElementById("form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const res = await fetch("/api/greet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: document.getElementById("name").value }),
+      });
+      document.getElementById("result").textContent = (await res.json()).message;
+    });
+  </script>
+</body>
+</html>

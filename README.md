@@ -22,6 +22,23 @@ The dashboard will be available at: **[http://localhost:7777](http://localhost:7
 
 ---
 
+## ⌨️ Command Line Interface
+
+Every tool also ships a fast CLI that calls its core logic directly (no server, no uploads). `setup.sh` installs the global `tools` dispatcher into `~/.local/bin`:
+
+```bash
+tools                                   # list tools and their CLI aliases
+tools qr "https://example.com"          # Link to QR
+tools pdf compress report.pdf           # PDF Toolbox
+tools kindle web https://article.url    # Kindle Toolbox
+tools transcript yt <url> --format srt  # YouTube & Local Transcript
+tools <alias> --help                    # tool-specific commands and options
+```
+
+Output files are written to your current directory by default. Every command supports `--json` for scripting.
+
+---
+
 ## 🛠️ Included Tools (Independent Repositories)
 
 | Tool | Directory / Repo | Port | Description |
@@ -47,11 +64,17 @@ Each tool lives in its own Git repository and runs in isolation inside its subdi
 
 ## ➕ Adding a New Tool
 
+Every tool must provide **both a web interface and a CLI**, following [TOOL_STANDARD.md](TOOL_STANDARD.md). The fastest start is copying the skeleton:
+
+```bash
+cp -r _template my-tool
+```
+
 The Hub includes **automatic tool discovery**. To integrate a new tool:
 
 1. Create or clone a folder in this directory (e.g., `my-tool/`).
-2. Add its startup script `run.sh` or `app.py` inside (and optionally a `tool.json`).
-3. *(Optional)* Register its metadata and port in `tools.json`:
+2. Add its `run.sh` (web), `cli.sh` (CLI), and `tool.json` with a `cli` block.
+3. Register its metadata, port, and CLI alias in `tools.json`:
 
 ```json
 {
@@ -63,7 +86,8 @@ The Hub includes **automatic tool discovery**. To integrate a new tool:
   "dir": "my-tool",
   "command": "./run.sh",
   "port": 8005,
-  "health_path": "/"
+  "health_path": "/",
+  "cli": { "alias": "my", "command": "./cli.sh" }
 }
 ```
 
@@ -77,8 +101,12 @@ Refresh the dashboard (`R` key or Refresh button) and it will automatically appe
 tools/
 ├── hub.py              # HTTP server and process manager (Python standard library)
 ├── start-hub.sh        # Executable startup script and browser launcher
-├── setup.sh            # Script to clone or update all independent tool repositories
-├── tools.json          # Declarative registry of tools and ports
+├── setup.sh            # Clones/updates tool repos and installs the `tools` CLI
+├── tools.json          # Declarative registry of tools, ports, and CLI aliases
+├── TOOL_STANDARD.md    # Required structure and CLI conventions for every tool
+├── bin/
+│   └── tools           # Global CLI dispatcher (tools <alias> <command> ...)
+├── _template/          # Skeleton for new tools (web + CLI + tests)
 ├── static/
 │   └── index.html      # Minimalist web interface (modern CSS + reactive JS)
 ├── tests/

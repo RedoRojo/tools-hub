@@ -32,6 +32,18 @@ for tool in "${TOOLS[@]}"; do
     fi
 done
 
+# Install the global `tools` CLI dispatcher into ~/.local/bin
+BIN_DIR="${TOOLS_BIN_DIR:-$HOME/.local/bin}"
+mkdir -p "$BIN_DIR"
+chmod +x "$DIR/bin/tools"
+ln -sf "$DIR/bin/tools" "$BIN_DIR/tools"
+echo "Installed CLI dispatcher: $BIN_DIR/tools -> $DIR/bin/tools"
+case ":$PATH:" in
+    *":$BIN_DIR:"*) ;;
+    *) echo "Warning: $BIN_DIR is not in your PATH. Add it to use the 'tools' command." ;;
+esac
+
 echo ""
 echo "All tools are ready."
 echo "Run ./start-hub.sh to open the dashboard at http://localhost:7777"
+echo "Run 'tools' to list the command line interfaces."
